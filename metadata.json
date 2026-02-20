@@ -1,0 +1,8 @@
+{
+  "name": "Hunt Messenger 2025",
+  "description": "A cutting-edge mobile messaging experience featuring Gemini-powered image generation, real-time voice conversations, and advanced search grounding.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
