@@ -2,6 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChatPreview, Message } from '../types';
 import * as gemini from '../geminiService';
+import ChatMenu from '../components/ChatMenu';
+import ConfirmationModal from '../components/ConfirmationModal';
+import MuteDurationModal from '../components/MuteDurationModal';
+import ReportUserModal from '../components/ReportUserModal';
 
 interface ChatScreenProps {
   chat: ChatPreview;
@@ -15,6 +19,8 @@ interface ChatScreenProps {
   onSendTextMessage: (text: string) => void;
   onResendMessage?: (id: string) => void;
   onShowUserDetails?: () => void;
+  onUpdateMuteStatus: (chatId: string, isMuted: boolean, duration?: string) => void;
+  onReportUser: (chatId: string, reason: string, details: string) => void;
   isAILoading?: boolean;
 }
 
@@ -30,10 +36,20 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
   onSendTextMessage,
   onResendMessage,
   onShowUserDetails,
+  onUpdateMuteStatus,
+  onReportUser,
   isAILoading = false
 }) => {
   const [inputText, setInputText] = useState('');
   const [isAttachmentPanelOpen, setIsAttachmentPanelOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMuteModalOpen, setIsMuteModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [confirmationState, setConfirmationState] = useState<{
+    type: 'block' | 'clear' | null;
+    isOpen: boolean;
+  }>({ type: null, isOpen: false });
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,6 +62,27 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
     if (!inputText.trim()) return;
     onSendTextMessage(inputText);
     setInputText('');
+  };
+
+  const handleBlockUser = () => {
+    // API call to block user would go here
+    console.log('User blocked');
+    setConfirmationState({ type: null, isOpen: false });
+  };
+
+  const handleClearChat = () => {
+    // API call to clear chat would go here
+    console.log('Chat cleared');
+    setConfirmationState({ type: null, isOpen: false });
+  };
+
+  const handleMuteConfirm = (duration: string) => {
+    if (duration === 'Unmute') {
+      onUpdateMuteStatus(chat.id, false);
+    } else {
+      onUpdateMuteStatus(chat.id, true, duration);
+    }
+    setIsMuteModalOpen(false);
   };
 
   const attachmentOptions = [
@@ -112,7 +149,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
             </div>
           </div>
         </button>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative">
           <button onClick={onStartVideoCall} className="w-10 h-10 icon-container text-[#12C784] hover:text-[#2FED9A] transition-colors active:scale-95">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
@@ -123,11 +160,28 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
             </svg>
           </button>
-          <button className="w-10 h-10 icon-container text-[#6B7280]">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-            </svg>
-          </button>
+
+          <div className="relative">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`w-10 h-10 icon-container transition-colors active:scale-95 ${isMenuOpen ? 'text-[#2FED9A] shadow-inner bg-gray-50' : 'text-[#6B7280]'}`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+            <ChatMenu
+              isOpen={isMenuOpen}
+              onClose={() => setIsMenuOpen(false)}
+              onViewProfile={() => onShowUserDetails?.()}
+              onSearch={() => console.log('Search triggered')}
+              onMuteSettings={() => setIsMuteModalOpen(true)}
+              isMuted={chat.isMuted || false}
+              onClearChat={() => setConfirmationState({ type: 'clear', isOpen: true })}
+              onBlockUser={() => setConfirmationState({ type: 'block', isOpen: true })}
+              onReportUser={() => setIsReportModalOpen(true)}
+            />
+          </div>
         </div>
       </header>
 
@@ -284,8 +338,45 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           </div>
         </div>
       )}
+
+      {/* Confirmation Modals */}
+      <ConfirmationModal
+        isOpen={confirmationState.isOpen && confirmationState.type === 'block'}
+        onClose={() => setConfirmationState({ type: null, isOpen: false })}
+        onConfirm={handleBlockUser}
+        title="Block User?"
+        message={`Are you sure you want to block ${chat.name}? They won't be able to message or call you.`}
+        confirmLabel="Block"
+        isDanger={true}
+      />
+
+      <ConfirmationModal
+        isOpen={confirmationState.isOpen && confirmationState.type === 'clear'}
+        onClose={() => setConfirmationState({ type: null, isOpen: false })}
+        onConfirm={handleClearChat}
+        title="Clear Chat?"
+        message="This will delete all messages in this conversation. This action cannot be undone."
+        confirmLabel="Clear"
+        isDanger={true}
+      />
+
+      <MuteDurationModal
+        isOpen={isMuteModalOpen}
+        onClose={() => setIsMuteModalOpen(false)}
+        onConfirm={handleMuteConfirm}
+        isMuted={chat.isMuted || false}
+      />
+
+      <ReportUserModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        onReport={(reason, details) => onReportUser(chat.id, reason, details)}
+        userName={chat.name}
+      />
     </div>
   );
 };
 
 export default ChatScreen;
+
+

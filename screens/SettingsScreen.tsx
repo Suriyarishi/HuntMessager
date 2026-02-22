@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { UserProfile } from '../types';
+import { UserProfile, SecuritySettings } from '../types';
 
 interface SettingsScreenProps {
   user: UserProfile | null;
@@ -10,9 +9,14 @@ interface SettingsScreenProps {
   onNotifications: () => void;
   onLinkedDevices: () => void;
   onLogout: () => void;
+  securitySettings: SecuritySettings;
+  onUpdateSecurity: (settings: SecuritySettings) => void;
 }
 
-const SettingsScreen: React.FC<SettingsScreenProps> = ({ user, onBack, onEditProfile, onPrivacy, onNotifications, onLinkedDevices, onLogout }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({
+  user, onBack, onEditProfile, onPrivacy, onNotifications, onLinkedDevices, onLogout,
+  securitySettings, onUpdateSecurity
+}) => {
   return (
     <div className="flex flex-col h-full bg-[#F4F7FA]">
       <header className="p-6 pb-2 flex items-center gap-4 sticky top-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-20">
@@ -62,6 +66,67 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ user, onBack, onEditPro
               </svg>
             </button>
           ))}
+        </div>
+
+        <div className="space-y-4 mb-10">
+          <p className="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em] px-4 mb-2">Security</p>
+
+          <div className="p-4 neumorphic-elevated flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 icon-container bg-[#F4F7FA] text-lg">
+                {securitySettings.preferredBiometric === 'fingerprint' ? '☝️' : '👤'}
+              </div>
+              <span className="font-extrabold text-[#1F2937]">Enable {securitySettings.preferredBiometric === 'fingerprint' ? 'Fingerprint' : 'Face ID'}</span>
+            </div>
+            <button
+              onClick={() => onUpdateSecurity({ ...securitySettings, isBiometricEnabled: !securitySettings.isBiometricEnabled })}
+              className={`w-12 h-6 rounded-full relative transition-all ${securitySettings.isBiometricEnabled ? 'bg-gradient-to-r from-[#2FED9A] to-[#12C784] shadow-md' : 'neumorphic-inset'}`}
+            >
+              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${securitySettings.isBiometricEnabled ? 'left-7' : 'left-1'}`} />
+            </button>
+          </div>
+
+          <div className="p-4 neumorphic-elevated flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 icon-container bg-[#F4F7FA] text-lg">
+                ⚙️
+              </div>
+              <span className="font-extrabold text-[#1F2937]">Preferred Method</span>
+            </div>
+            <div className="flex gap-2 p-1 neumorphic-inset rounded-2xl">
+              {(['fingerprint', 'face'] as const).map((method) => (
+                <button
+                  key={method}
+                  onClick={() => onUpdateSecurity({ ...securitySettings, preferredBiometric: method })}
+                  className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all ${securitySettings.preferredBiometric === method ? 'bg-white text-[#12C784] shadow-sm' : 'text-[#94A3B8]'}`}
+                >
+                  {method}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {securitySettings.isBiometricEnabled && (
+            <div className="p-4 neumorphic-elevated flex flex-col gap-4 animate-slide-down-fade">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 icon-container bg-[#F4F7FA] text-lg">
+                  ⏲️
+                </div>
+                <span className="font-extrabold text-[#1F2937]">Timeout threshold</span>
+              </div>
+              <div className="flex gap-2 p-1 neumorphic-inset rounded-2xl">
+                {(['immediate', '1min', '5min'] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => onUpdateSecurity({ ...securitySettings, timeout: t })}
+                    className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all ${securitySettings.timeout === t ? 'bg-white text-[#12C784] shadow-sm' : 'text-[#94A3B8]'}`}
+                  >
+                    {t === 'immediate' ? 'Now' : t}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <button

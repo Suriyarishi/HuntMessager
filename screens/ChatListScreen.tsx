@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { ChatPreview, CallLog } from '../types';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 interface ChatListScreenProps {
   chats: ChatPreview[];
@@ -10,6 +11,7 @@ interface ChatListScreenProps {
   onSearch: () => void;
   onAITools: () => void;
   onCallBack: (log: CallLog) => void;
+  onDeleteChats: (ids: string[]) => void;
 }
 
 const ChatListScreen: React.FC<ChatListScreenProps> = ({
@@ -19,12 +21,21 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
   onSettings,
   onSearch,
   onAITools,
-  onCallBack
+  onCallBack,
+  onDeleteChats
 }) => {
   const [activeTab, setActiveTab] = useState<'chats' | 'calls'>('chats');
   const [callFilter, setCallFilter] = useState<'all' | 'missed' | 'video' | 'audio'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Selection Mode State
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [animatingDeleteIds, setAnimatingDeleteIds] = useState<Set<string>>(new Set());
+
+  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 
   const getStatusColor = (status: CallLog['status']) => {
     switch (status) {
@@ -42,28 +53,99 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
     }
   };
 
+  const handleLongPressStart = (id: string) => {
+    if (selectionMode) return;
+    longPressTimer.current = setTimeout(() => {
+      setSelectionMode(true);
+      setSelectedIds(new Set([id]));
+      // Trigger a light haptic feel via scale if possible, but JS doesn't have native haptic API easily accessible here.
+    }, 600);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+  };
+
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+      if (newSelected.size === 0) {
+        setSelectionMode(false);
+      }
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleCancelSelection = () => {
+    setSelectionMode(false);
+    setSelectedIds(new Set());
+  };
+
+  const handleDeleteConfirm = () => {
+    const idsToDelete = Array.from(selectedIds);
+    setAnimatingDeleteIds(new Set(idsToDelete));
+
+    // Smooth reflow and exit selection mode after animation
+    setTimeout(() => {
+      onDeleteChats(idsToDelete);
+      handleCancelSelection();
+      setAnimatingDeleteIds(new Set());
+    }, 400); // Match height-collapse animation duration
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#F4F7FA]">
-      <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-20">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 icon-container bg-gradient-to-br from-[#2FED9A] to-[#12C784]">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
-            </svg>
+      {selectionMode ? (
+        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[#F4F7FA]/95 backdrop-blur-xl z-20 animate-slide-down-fade">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleCancelSelection}
+              className="w-10 h-10 flex items-center justify-center text-[#1F2937] hover:bg-black/5 rounded-full transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h1 className="text-xl font-extrabold tracking-tight text-[#1F2937]">
+              {selectedIds.size} Selected
+            </h1>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#1F2937]">Hunt</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <button onClick={onAITools} className="w-11 h-11 icon-container active:scale-95 transition-transform">
-            <svg className="w-6 h-6 text-[#12C784]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <button
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="w-11 h-11 icon-container bg-white text-[#FF6B6B] active:scale-95 transition-transform"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </button>
-          <button onClick={onSettings} className="w-11 h-11 rounded-full neumorphic-elevated overflow-hidden border-2 border-white active:scale-95 transition-transform">
-            <img src="https://picsum.photos/seed/user/200" alt="Me" className="w-full h-full object-cover" />
-          </button>
-        </div>
-      </header>
+        </header>
+      ) : (
+        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 icon-container bg-gradient-to-br from-[#2FED9A] to-[#12C784]">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-extrabold tracking-tight text-[#1F2937]">Hunt</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <button onClick={onAITools} className="w-11 h-11 icon-container active:scale-95 transition-transform">
+              <svg className="w-6 h-6 text-[#12C784]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </button>
+            <button onClick={onSettings} className="w-11 h-11 rounded-full neumorphic-elevated overflow-hidden border-2 border-white active:scale-95 transition-transform">
+              <img src="https://picsum.photos/seed/user/200" alt="Me" className="w-full h-full object-cover" />
+            </button>
+          </div>
+        </header>
+      )}
 
       {/* Search Bar Section */}
       <div className="px-6 mb-6">
@@ -158,36 +240,70 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
 
             return (
               <div className="space-y-4">
-                {filteredChats.map(chat => (
-                  <button
-                    key={chat.id}
-                    onClick={() => onChatSelect(chat)}
-                    className="w-full flex items-center gap-4 p-4 neumorphic-elevated group active:scale-[0.98] transition-all"
-                  >
-                    <div className="relative shrink-0">
-                      <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-md">
-                        <img src={chat.avatar} alt={chat.name} className="w-full h-full object-cover" />
-                      </div>
-                      {chat.online && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#2FED9A] border-4 border-[#F4F7FA] rounded-full shadow-sm" />
+                {filteredChats.map(chat => {
+                  const isSelected = selectedIds.has(chat.id);
+                  const isAnimatingDelete = animatingDeleteIds.has(chat.id);
+
+                  return (
+                    <button
+                      key={chat.id}
+                      onClick={() => selectionMode ? toggleSelection(chat.id) : onChatSelect(chat)}
+                      onMouseDown={() => handleLongPressStart(chat.id)}
+                      onMouseUp={handleLongPressEnd}
+                      onMouseLeave={handleLongPressEnd}
+                      onTouchStart={() => handleLongPressStart(chat.id)}
+                      onTouchEnd={handleLongPressEnd}
+                      className={`w-full flex items-center gap-4 p-4 group transition-all duration-300 relative rounded-[24px] 
+                        ${isAnimatingDelete ? 'animate-height-collapse' : ''} 
+                        ${isSelected ? 'selection-gradient-border selected-tint scale-[0.98]' : 'neumorphic-elevated hover:scale-[1.01] active:scale-[0.98]'}`}
+                    >
+                      {/* Selection Checkbox */}
+                      {selectionMode && (
+                        <div className="shrink-0 flex items-center justify-center animate-checkbox-pop">
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 
+                            ${isSelected ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] border-transparent' : 'border-[#CBD5E1]'}`}>
+                            {isSelected && (
+                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </div>
+                        </div>
                       )}
-                    </div>
-                    <div className="flex-1 text-left min-w-0">
-                      <div className="flex justify-between items-baseline mb-1">
-                        <h3 className="font-extrabold text-[#1F2937] truncate">{chat.name}</h3>
-                        <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">{chat.time}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm text-[#6B7280] font-medium line-clamp-1 flex-1 pr-2">{chat.lastMessage}</p>
-                        {chat.unreadCount > 0 && (
-                          <span className="shrink-0 bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-[#2FED9A]/20">
-                            {chat.unreadCount}
-                          </span>
+
+                      <div className="relative shrink-0">
+                        <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-md">
+                          <img src={chat.avatar} alt={chat.name} className="w-full h-full object-cover" />
+                        </div>
+                        {chat.online && !selectionMode && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#2FED9A] border-4 border-[#F4F7FA] rounded-full shadow-sm" />
                         )}
                       </div>
-                    </div>
-                  </button>
-                ))}
+                      <div className="flex-1 text-left min-w-0">
+                        <div className="flex justify-between items-baseline mb-1">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <h3 className="font-extrabold text-[#1F2937] truncate">{chat.name}</h3>
+                            {chat.isMuted && (
+                              <svg className="w-3 h-3 text-[#94A3B8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                              </svg>
+                            )}
+                          </div>
+                          <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">{chat.time}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p className="text-sm text-[#6B7280] font-medium line-clamp-1 flex-1 pr-2">{chat.lastMessage}</p>
+                          {chat.unreadCount > 0 && !selectionMode && (
+                            <span className="shrink-0 bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-[#2FED9A]/20">
+                              {chat.unreadCount}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             );
           })()
@@ -276,6 +392,16 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
         </svg>
       </button>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete conversation?"
+        message="This will remove the chat from your list."
+        confirmLabel="Delete"
+        isDanger={true}
+      />
     </div>
   );
 };

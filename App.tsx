@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Screen, UserProfile, ChatPreview, Message, CallLog } from './types';
+import React, { useState, useEffect, useRef } from 'react';
+import { Screen, UserProfile, ChatPreview, Message, CallLog, SecuritySettings } from './types';
 import UserDetailsScreen from './screens/UserDetailsScreen';
 import SplashScreen from './screens/SplashScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -21,6 +21,8 @@ import VideoCallScreen from './screens/VideoCallScreen';
 import MediaPreviewScreen from './screens/MediaPreviewScreen';
 import LocationPickerScreen from './screens/LocationPickerScreen';
 import DocumentPreviewScreen from './screens/DocumentPreviewScreen';
+import FingerprintLockScreen from './screens/FingerprintLockScreen';
+import FaceIDLockScreen from './screens/FaceIDLockScreen';
 
 // Mock Gemini AI service
 const gemini = {
@@ -41,10 +43,18 @@ const App: React.FC = () => {
     phoneNumber: '+1 555-0123',
     about: 'The future is not set. There is no fate but what we make for ourselves.'
   });
+  const [securitySettings, setSecuritySettings] = useState<SecuritySettings>({
+    isBiometricEnabled: false,
+    preferredBiometric: 'fingerprint',
+    timeout: 'immediate'
+  });
+  const [isLocked, setIsLocked] = useState(false);
+  const lastActiveRef = useRef<number>(Date.now());
   const [selectedChat, setSelectedChat] = useState<ChatPreview | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<{ uri: string, type: 'image' | 'video' } | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<{ name: string; size: string; type: string } | null>(null);
   const [isAILoading, setIsAILoading] = useState(false);
+  const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: '', visible: false });
   const [callLogs, setCallLogs] = useState<CallLog[]>([
     { id: '1', name: 'James Bond', avatar: 'https://picsum.photos/seed/james/200', type: 'audio', status: 'outgoing', time: '10:30 AM' },
     { id: '2', name: 'Sarah Connor', avatar: 'https://picsum.photos/seed/sarah/200', type: 'video', status: 'missed', time: 'Yesterday' },
@@ -93,6 +103,36 @@ const App: React.FC = () => {
       online: true
     }
   ]);
+
+  useEffect(() => {
+    // Check if we should lock on launch
+    if (securitySettings.isBiometricEnabled) {
+      setIsLocked(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        lastActiveRef.current = Date.now();
+      } else {
+        if (securitySettings.isBiometricEnabled) {
+          const now = Date.now();
+          const inactiveTime = now - lastActiveRef.current;
+          let timeoutMs = 0;
+          if (securitySettings.timeout === '1min') timeoutMs = 60000;
+          if (securitySettings.timeout === '5min') timeoutMs = 300000;
+
+          if (inactiveTime >= timeoutMs) {
+            setIsLocked(true);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [securitySettings]);
 
   const navigate = (screen: Screen) => {
     setCurrentScreen(screen);
@@ -284,6 +324,45 @@ const App: React.FC = () => {
     navigate(Screen.Chat);
   };
 
+  const handleUpdateMuteStatus = (chatId: string, isMuted: boolean, duration?: string) => {
+    setChats(prev => prev.map(chat =>
+      chat.id === chatId ? { ...chat, isMuted } : chat
+    ));
+
+    // Update selected chat if it's the one being muted
+    if (selectedChat?.id === chatId) {
+      setSelectedChat({ ...selectedChat, isMuted });
+    }
+
+    const message = isMuted
+      ? `Notifications muted for ${duration || 'specified time'}.`
+      : 'Notifications unmuted.';
+
+    setToast({ message, visible: true });
+    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
+  };
+
+  const handleReportUser = (chatId: string, reason: string, details: string) => {
+    // API call to report user would go here
+    console.log(`User reported in chat ${chatId}. Reason: ${reason}, Details: ${details}`);
+
+    setToast({
+      message: 'Report submitted. Thank you for helping keep Hunt safe.',
+      visible: true
+    });
+    setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 4000);
+  };
+
+  const handleDeleteChats = (ids: string[]) => {
+    setChats(prev => prev.filter(chat => !ids.includes(chat.id)));
+    // Also clear associated messages for cleanup
+    setChatMessages(prev => {
+      const newMessages = { ...prev };
+      ids.forEach(id => delete newMessages[id]);
+      return newMessages;
+    });
+  };
+
   return (
     <div className="relative h-screen w-full max-w-[430px] mx-auto bg-[#F4F7FA] overflow-hidden shadow-2xl flex flex-col border-x border-white/20">
       <div className="flex-1 relative overflow-hidden">
@@ -316,6 +395,7 @@ const App: React.FC = () => {
             onSearch={() => navigate(Screen.Search)}
             onAITools={() => navigate(Screen.AITools)}
             onCallBack={handleCallBack}
+            onDeleteChats={handleDeleteChats}
           />
         )}
 
@@ -340,6 +420,8 @@ const App: React.FC = () => {
             onSendTextMessage={handleSendTextMessage}
             onResendMessage={handleResendMessage}
             onShowUserDetails={() => navigate(Screen.UserDetails)}
+            onUpdateMuteStatus={handleUpdateMuteStatus}
+            onReportUser={handleReportUser}
           />
         )}
 
@@ -397,6 +479,8 @@ const App: React.FC = () => {
         {currentScreen === Screen.Settings && (
           <SettingsScreen
             user={user}
+            securitySettings={securitySettings}
+            onUpdateSecurity={setSecuritySettings}
             onBack={() => navigate(Screen.ChatList)}
             onEditProfile={() => navigate(Screen.EditProfile)}
             onPrivacy={() => navigate(Screen.Privacy)}
@@ -441,9 +525,43 @@ const App: React.FC = () => {
         {currentScreen === Screen.LinkedDevices && (
           <LinkedDevicesScreen onBack={() => navigate(Screen.Settings)} />
         )}
+
+        {isLocked && (
+          <div className="absolute inset-0 z-[100]">
+            {securitySettings.preferredBiometric === 'fingerprint' ? (
+              <FingerprintLockScreen
+                onSuccess={() => setIsLocked(false)}
+                onUsePasscode={() => {
+                  alert('Passcode feature coming soon!');
+                }}
+              />
+            ) : (
+              <FaceIDLockScreen
+                onSuccess={() => setIsLocked(false)}
+                onUsePasscode={() => {
+                  alert('Passcode feature coming soon!');
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
 
       <div className="h-1.5 w-32 bg-slate-900/10 rounded-full mx-auto mb-2 mt-auto" />
+
+      {/* Toast Notification */}
+      {toast.visible && (
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-[200] animate-slide-down-fade">
+          <div className="bg-[#1F2937] text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-xl">
+            <div className="w-6 h-6 rounded-full bg-[#2FED9A] flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span className="text-sm font-bold tracking-tight">{toast.message}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

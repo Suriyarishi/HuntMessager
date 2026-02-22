@@ -20,7 +20,9 @@ export enum Screen {
   MediaPreview = 'media-preview',
   LocationPicker = 'location-picker',
   DocumentPreview = 'document-preview',
-  UserDetails = 'user-details'
+  UserDetails = 'user-details',
+  FingerprintLock = 'fingerprint-lock',
+  FaceLock = 'face-lock'
 }
 
 export interface ChatPreview {
@@ -31,6 +33,7 @@ export interface ChatPreview {
   time: string;
   unreadCount: number;
   online?: boolean;
+  isMuted?: boolean;
 }
 
 export interface Message {
@@ -59,4 +62,10 @@ export interface CallLog {
   type: 'audio' | 'video';
   status: 'incoming' | 'outgoing' | 'missed';
   time: string;
+}
+
+export interface SecuritySettings {
+  isBiometricEnabled: boolean;
+  preferredBiometric: 'fingerprint' | 'face';
+  timeout: 'immediate' | '1min' | '5min';
 }
