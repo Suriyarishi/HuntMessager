@@ -18,7 +18,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
 
   return (
     <div
-      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#F4F7FA] transition-opacity duration-500"
+      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-pastel)] transition-opacity duration-500"
       style={{ opacity }}
     >
       <div className="relative w-28 h-28 mb-8 flex items-center justify-center">
@@ -29,8 +29,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           </svg>
         </div>
       </div>
-      <h1 className="text-4xl font-extrabold tracking-tight text-[#1F2937]">HUNT</h1>
-      <p className="text-[#6B7280] text-xs mt-3 font-semibold tracking-[0.3em] uppercase opacity-80">Messenger 2026</p>
+      <h1 className="text-4xl font-extrabold tracking-tight text-[var(--text-primary)]">HUNT</h1>
+      <p className="text-[var(--text-secondary)] text-xs mt-3 font-semibold tracking-[0.3em] uppercase opacity-80">Messenger 2026</p>
     </div>
   );
 };

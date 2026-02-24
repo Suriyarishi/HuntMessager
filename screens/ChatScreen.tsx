@@ -91,59 +91,59 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
-      ), tint: 'bg-[#E0F7F1]', action: () => onMediaSelect('https://picsum.photos/seed/picsum/800/1200', 'image')
-    }, // soft mint
+      ), tint: 'bg-[#E0F7F1] dark:bg-[#12C784]/10', action: () => onMediaSelect('https://picsum.photos/seed/picsum/800/1200', 'image')
+    },
     {
       label: 'Video', icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
-      ), tint: 'bg-[#E3F2FD]', action: () => onMediaSelect('https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4', 'video')
-    }, // soft blue
+      ), tint: 'bg-[#E3F2FD] dark:bg-blue-500/10', action: () => onMediaSelect('https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4', 'video')
+    },
     {
       label: 'Document', icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-      ), tint: 'bg-[#F3E5F5]'
-    }, // soft purple
+      ), tint: 'bg-[#F3E5F5] dark:bg-purple-500/10'
+    },
     {
       label: 'Location', icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
-      ), tint: 'bg-[#FFEBEE]', action: () => onLocationSelect()
-    }, // soft red
+      ), tint: 'bg-[#FFEBEE] dark:bg-red-500/10', action: () => onLocationSelect()
+    },
     {
       label: 'Contact', icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
-      ), tint: 'bg-[#E0F2F1]'
-    } // soft teal
+      ), tint: 'bg-[#E0F2F1] dark:bg-teal-500/10'
+    }
   ];
 
   return (
-    <div className="flex flex-col h-full bg-[#F4F7FA] relative">
-      <header className="px-6 py-4 flex items-center gap-4 bg-[#F4F7FA]/80 backdrop-blur-xl sticky top-0 z-20">
-        <button onClick={onBack} className="w-10 h-10 icon-container -ml-2 text-[#1F2937] active:scale-95 transition-transform">
+    <div className="flex flex-col h-full bg-[var(--bg-pastel)] relative">
+      <header className="px-6 py-4 flex items-center gap-4 bg-[var(--bg-pastel)]/80 backdrop-blur-xl sticky top-0 z-20">
+        <button onClick={onBack} className="w-10 h-10 icon-container -ml-2 text-[var(--text-primary)] active:scale-95 transition-transform">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <button onClick={onShowUserDetails} className="flex-1 flex items-center gap-3 active:opacity-70 transition-opacity text-left">
           <div className="relative">
-            <div className="w-10 h-10 rounded-full neumorphic-elevated overflow-hidden border-2 border-white shadow-sm">
+            <div className="w-10 h-10 rounded-full neumorphic-elevated overflow-hidden border-2 border-[var(--surface-white)] shadow-sm">
               <img src={chat.avatar} alt={chat.name} className="w-full h-full object-cover" />
             </div>
             {chat.online && <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-[#2FED9A] border-4 border-[#F4F7FA] rounded-full shadow-sm" />}
           </div>
           <div>
-            <h2 className="font-extrabold text-[#1F2937] leading-tight">{chat.name}</h2>
+            <h2 className="font-extrabold text-[var(--text-primary)] leading-tight">{chat.name}</h2>
             <div className="flex items-center gap-1.5">
               <div className={`w-1.5 h-1.5 rounded-full ${chat.online ? 'bg-[#2FED9A]' : 'bg-[#94A3B8]'}`} />
-              <p className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">
+              <p className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">
                 {chat.online ? 'Online' : 'Offline'}
               </p>
             </div>
@@ -164,7 +164,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
           <div className="relative">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`w-10 h-10 icon-container transition-colors active:scale-95 ${isMenuOpen ? 'text-[#2FED9A] shadow-inner bg-gray-50' : 'text-[#6B7280]'}`}
+              className={`w-10 h-10 icon-container transition-colors active:scale-95 ${isMenuOpen ? 'text-[#2FED9A] shadow-inner bg-gray-50' : 'text-[var(--text-secondary)]'}`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -190,22 +190,22 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
         className="flex-1 overflow-y-auto px-6 py-8 space-y-8 hide-scrollbar"
       >
         <div className="text-center">
-          <span className="text-[10px] px-3 py-1.5 neumorphic-inset rounded-full text-[#6B7280] font-black uppercase tracking-widest">Today</span>
+          <span className="text-[10px] px-3 py-1.5 neumorphic-inset rounded-full text-[var(--text-secondary)] font-black uppercase tracking-widest">Today</span>
         </div>
 
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] p-4 rounded-3xl ${msg.sender === 'me'
-              ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white rounded-tr-none shadow-lg'
+              ? 'bg-[var(--primary-gradient-darker)] text-white rounded-tr-none shadow-lg'
               : msg.sender === 'ai'
-                ? 'bg-white neumorphic-elevated text-[#1F2937] border-l-4 border-[#2FED9A] rounded-tl-none font-medium'
-                : 'bg-white neumorphic-elevated text-[#1F2937] rounded-tl-none font-medium'
-              }`}>
+                ? 'bg-[var(--surface-white)] neumorphic-elevated text-[var(--text-primary)] border-l-4 border-[var(--primary-light)] rounded-tl-none font-medium'
+                : 'bg-[var(--surface-white)] neumorphic-elevated text-[var(--text-primary)] rounded-tl-none font-medium'
+              }`} style={msg.sender === 'me' ? { background: 'var(--primary-gradient-darker)' } : {}}>
               <p className="text-sm leading-relaxed">{msg.text}</p>
 
               {/* Upload/Processing States */}
               {(msg.status === 'uploading' || msg.status === 'processing') && (
-                <div className="mt-3 bg-white/20 rounded-2xl p-3 backdrop-blur-sm border border-white/20">
+                <div className="mt-3 bg-[var(--surface-white)]/20 rounded-2xl p-3 backdrop-blur-sm border border-[var(--surface-white)]/20">
                   {msg.status === 'uploading' ? (
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
@@ -214,14 +214,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
                       </div>
                       <div className="h-1.5 w-full bg-black/10 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-white transition-all duration-300 ease-out animate-shimmer"
+                          className="h-full bg-[var(--surface-white)] transition-all duration-300 ease-out animate-shimmer"
                           style={{ width: `${msg.progress}%` }}
                         />
                       </div>
                     </div>
                   ) : (
                     <div className="flex items-center gap-3">
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-[var(--surface-white)]/20 border-t-white rounded-full animate-spin" />
                       <span className="text-[10px] font-black uppercase tracking-widest">Sending securely...</span>
                     </div>
                   )}
@@ -239,7 +239,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
                   </div>
                   <button
                     onClick={() => onResendMessage?.(msg.id)}
-                    className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white/30 transition-all active:scale-95"
+                    className="px-3 py-1 bg-[var(--surface-white)]/20 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--surface-white)]/30 transition-all active:scale-95"
                   >
                     Retry
                   </button>
@@ -247,7 +247,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
               )}
 
               <div className={`flex items-center gap-1 mt-2 ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                <span className={`text-[10px] uppercase font-bold tracking-widest ${msg.sender === 'me' ? 'text-white/70' : 'text-[#94A3B8]'}`}>
+                <span className={`text-[10px] uppercase font-bold tracking-widest ${msg.sender === 'me' ? 'text-white/70' : 'text-[var(--text-secondary)]'}`}>
                   {msg.timestamp}
                 </span>
                 {msg.sender === 'me' && msg.status !== 'uploading' && msg.status !== 'processing' && msg.status !== 'failed' && (
@@ -274,10 +274,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       </div>
 
       <div className="p-6 pb-8 safe-area-bottom">
-        <div className="flex items-end gap-3 p-1.5 input-field-neumorphic !rounded-[32px] !border-white transition-all">
+        <div className="flex items-end gap-3 p-1.5 input-field-neumorphic !rounded-[32px] !border-[var(--surface-white)] transition-all">
           <button
             onClick={() => setIsAttachmentPanelOpen(true)}
-            className="p-3 text-[#6B7280] hover:text-[#12C784] transition-colors active:scale-90"
+            className="p-3 text-[var(--text-secondary)] hover:text-[#12C784] transition-colors active:scale-90"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -295,7 +295,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
                 handleSend();
               }
             }}
-            className="flex-1 bg-transparent py-3.5 outline-none text-sm font-medium resize-none hide-scrollbar max-h-32 text-[#1F2937] placeholder-[#9CA3AF]"
+            className="flex-1 bg-transparent py-3.5 outline-none text-sm font-medium resize-none hide-scrollbar max-h-32 text-[var(--text-primary)] text-[var(--text-secondary)]"
           />
 
           <button
@@ -303,7 +303,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
             disabled={!inputText.trim()}
             className={`w-12 h-12 rounded-full transition-all flex items-center justify-center shadow-lg ${inputText.trim()
               ? 'pill-button-primary bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white'
-              : 'neumorphic-inset text-[#94A3B8] opacity-50 scale-90'
+              : 'neumorphic-inset text-[var(--text-secondary)] opacity-50 scale-90'
               }`}
           >
             <svg className="w-5 h-5 translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -317,20 +317,20 @@ const ChatScreen: React.FC<ChatScreenProps> = ({
       {isAttachmentPanelOpen && (
         <div className="absolute inset-0 z-30">
           <div
-            className="absolute inset-0 bg-slate-900/10 backdrop-blur-sm transition-opacity duration-300"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setIsAttachmentPanelOpen(false)}
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 animate-slide-up">
-            <div className="bg-white rounded-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] p-8">
-              <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-8 cursor-pointer" onClick={() => setIsAttachmentPanelOpen(false)} />
+            <div className="bg-[var(--surface-white)] rounded-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.2)] p-8">
+              <div className="w-12 h-1.5 bg-[var(--divider)] rounded-full mx-auto mb-8 cursor-pointer" onClick={() => setIsAttachmentPanelOpen(false)} />
 
               <div className="grid grid-cols-3 gap-y-10">
                 {attachmentOptions.map((opt, i) => (
                   <div key={i} className="flex flex-col items-center gap-3">
-                    <button className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.96] shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] text-[#1F2937] hover:bg-gradient-to-br hover:from-[#2FED9A] hover:to-[#12C784] hover:text-white hover:shadow-[#2FED9A]/30 ${opt.tint}`}>
+                    <button className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.96] shadow-[6px_6px_12px_var(--neumorphic-shadow),-6px_-6px_12px_var(--neumorphic-light)] text-[var(--text-primary)] hover:bg-gradient-to-br hover:from-[#2FED9A] hover:to-[#12C784] hover:text-white hover:shadow-[#2FED9A]/30 ${opt.tint}`}>
                       {opt.icon}
                     </button>
-                    <span className="text-[11px] font-bold text-[#1F2937] uppercase tracking-wider">{opt.label}</span>
+                    <span className="text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider">{opt.label}</span>
                   </div>
                 ))}
               </div>

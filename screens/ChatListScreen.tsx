@@ -41,7 +41,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
     switch (status) {
       case 'missed': return 'text-[#FF6B6B]';
       case 'outgoing': return 'text-[#12C784] opacity-80';
-      default: return 'text-[#6B7280]';
+      default: return 'text-[var(--text-secondary)]';
     }
   };
 
@@ -49,7 +49,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
     switch (status) {
       case 'missed': return 'bg-[#FFF5F5]';
       case 'outgoing': return 'bg-[#F0FFF4]';
-      default: return 'bg-[#F8FAFC]';
+      default: return 'bg-[var(--surface-white)]';
     }
   };
 
@@ -99,25 +99,25 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F4F7FA]">
+    <div className="flex flex-col h-full bg-[var(--bg-pastel)]">
       {selectionMode ? (
-        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[#F4F7FA]/95 backdrop-blur-xl z-20 animate-slide-down-fade">
+        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[var(--bg-pastel)]/95 backdrop-blur-xl z-20 animate-slide-down-fade">
           <div className="flex items-center gap-4">
             <button
               onClick={handleCancelSelection}
-              className="w-10 h-10 flex items-center justify-center text-[#1F2937] hover:bg-black/5 rounded-full transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-[var(--text-primary)] hover:bg-black/5 rounded-full transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h1 className="text-xl font-extrabold tracking-tight text-[#1F2937]">
+            <h1 className="text-xl font-extrabold tracking-tight text-[var(--text-primary)]">
               {selectedIds.size} Selected
             </h1>
           </div>
           <button
             onClick={() => setIsDeleteModalOpen(true)}
-            className="w-11 h-11 icon-container bg-white text-[#FF6B6B] active:scale-95 transition-transform"
+            className="w-11 h-11 icon-container bg-[var(--surface-white)] text-[#FF6B6B] active:scale-95 transition-transform"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -125,14 +125,14 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
           </button>
         </header>
       ) : (
-        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-20">
+        <header className="p-6 pb-4 flex items-center justify-between sticky top-0 bg-[var(--bg-pastel)]/80 backdrop-blur-xl z-20">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 icon-container bg-gradient-to-br from-[#2FED9A] to-[#12C784]">
               <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-[#1F2937]">Hunt</h1>
+            <h1 className="text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">Hunt</h1>
           </div>
           <div className="flex items-center gap-4">
             <button onClick={onAITools} className="w-11 h-11 icon-container active:scale-95 transition-transform">
@@ -140,7 +140,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </button>
-            <button onClick={onSettings} className="w-11 h-11 rounded-full neumorphic-elevated overflow-hidden border-2 border-white active:scale-95 transition-transform">
+            <button onClick={onSettings} className="w-11 h-11 rounded-full neumorphic-elevated overflow-hidden border-2 border-[var(--surface-white)] active:scale-95 transition-transform">
               <img src="https://picsum.photos/seed/user/200" alt="Me" className="w-full h-full object-cover" />
             </button>
           </div>
@@ -149,8 +149,8 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
 
       {/* Search Bar Section */}
       <div className="px-6 mb-6">
-        <div className={`relative flex items-center h-14 bg-[#F8FAFC] neumorphic-inset rounded-3xl px-5 transition-all duration-300 ${isSearchFocused ? 'ring-4 ring-[#2FED9A]/10 scale-[1.01]' : ''}`}>
-          <svg className={`w-5 h-5 transition-colors duration-300 ${isSearchFocused ? 'text-[#12C784]' : 'text-[#94A3B8]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className={`relative flex items-center h-14 bg-[var(--surface-white)] neumorphic-inset rounded-3xl px-5 transition-all duration-300 ${isSearchFocused ? 'ring-4 ring-[#2FED9A]/10 scale-[1.01]' : ''}`}>
+          <svg className={`w-5 h-5 transition-colors duration-300 ${isSearchFocused ? 'text-[#12C784]' : 'text-[var(--text-secondary)]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -160,7 +160,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
             onFocus={() => setIsSearchFocused(true)}
             onBlur={() => setIsSearchFocused(false)}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none px-4 text-sm font-bold text-[#1F2937] placeholder-[#94A3B8]"
+            className="flex-1 bg-transparent border-none outline-none px-4 text-sm font-bold text-[var(--text-primary)] text-[var(--text-secondary)]"
           />
           {searchQuery && (
             <button
@@ -177,7 +177,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
 
       {/* Segmented Control */}
       <div className="px-6 mb-2">
-        <div className="p-1.5 bg-[#E2E8F0]/30 neumorphic-inset rounded-2xl flex relative h-14 overflow-hidden">
+        <div className="p-1.5 bg-[var(--surface-white)]/30 neumorphic-inset rounded-2xl flex relative h-14 overflow-hidden">
           {/* Slider */}
           <div
             className="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-gradient-to-r from-[#2FED9A] to-[#12C784] rounded-xl shadow-lg transition-transform duration-300 ease-out z-0"
@@ -207,7 +207,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
               onClick={() => setCallFilter(filter as any)}
               className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all active:scale-95 ${callFilter === filter
                 ? 'bg-gradient-to-r from-[#2FED9A] to-[#12C784] text-white shadow-md shadow-[#2FED9A]/20'
-                : 'bg-white text-[#64748B] neumorphic-elevated'
+                : 'bg-[var(--surface-white)] text-[#64748B] neumorphic-elevated'
                 }`}
             >
               {filter}
@@ -227,13 +227,13 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
             if (filteredChats.length === 0) {
               return (
                 <div className="h-full flex flex-col items-center justify-center -mt-10">
-                  <div className="w-24 h-24 rounded-[32px] bg-[#E2E8F0]/30 flex items-center justify-center mb-6 neumorphic-elevated opacity-60">
-                    <svg className="w-10 h-10 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-24 h-24 rounded-[32px] bg-[var(--surface-white)]/30 flex items-center justify-center mb-6 neumorphic-elevated opacity-60">
+                    <svg className="w-10 h-10 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
-                  <p className="text-lg font-bold text-[#1F2937]">No conversations found</p>
-                  <p className="text-sm text-[#94A3B8] font-medium mt-1">Try searching by name or message text</p>
+                  <p className="text-lg font-bold text-[var(--text-primary)]">No conversations found</p>
+                  <p className="text-sm text-[var(--text-secondary)] font-medium mt-1">Try searching by name or message text</p>
                 </div>
               );
             }
@@ -272,7 +272,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
                       )}
 
                       <div className="relative shrink-0">
-                        <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-md">
+                        <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-[var(--surface-white)] shadow-md">
                           <img src={chat.avatar} alt={chat.name} className="w-full h-full object-cover" />
                         </div>
                         {chat.online && !selectionMode && (
@@ -282,18 +282,18 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
                       <div className="flex-1 text-left min-w-0">
                         <div className="flex justify-between items-baseline mb-1">
                           <div className="flex items-center gap-2 min-w-0">
-                            <h3 className="font-extrabold text-[#1F2937] truncate">{chat.name}</h3>
+                            <h3 className="font-extrabold text-[var(--text-primary)] truncate">{chat.name}</h3>
                             {chat.isMuted && (
-                              <svg className="w-3 h-3 text-[#94A3B8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3 text-[var(--text-secondary)] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
                               </svg>
                             )}
                           </div>
-                          <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">{chat.time}</span>
+                          <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{chat.time}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <p className="text-sm text-[#6B7280] font-medium line-clamp-1 flex-1 pr-2">{chat.lastMessage}</p>
+                          <p className="text-sm text-[var(--text-secondary)] font-medium line-clamp-1 flex-1 pr-2">{chat.lastMessage}</p>
                           {chat.unreadCount > 0 && !selectionMode && (
                             <span className="shrink-0 bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-[#2FED9A]/20">
                               {chat.unreadCount}
@@ -323,13 +323,13 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
             if (filteredCalls.length === 0) {
               return (
                 <div className="h-full flex flex-col items-center justify-center -mt-10">
-                  <div className="w-24 h-24 rounded-[32px] bg-[#E2E8F0]/30 flex items-center justify-center mb-6 neumorphic-elevated opacity-60">
-                    <svg className="w-10 h-10 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-24 h-24 rounded-[32px] bg-[var(--surface-white)]/30 flex items-center justify-center mb-6 neumorphic-elevated opacity-60">
+                    <svg className="w-10 h-10 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
-                  <p className="text-lg font-bold text-[#1F2937]">No calls found</p>
-                  <p className="text-sm text-[#94A3B8] font-medium mt-1">Try searching by name or number</p>
+                  <p className="text-lg font-bold text-[var(--text-primary)]">No calls found</p>
+                  <p className="text-sm text-[var(--text-secondary)] font-medium mt-1">Try searching by name or number</p>
                 </div>
               );
             }
@@ -339,17 +339,17 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
                 {filteredCalls.map(log => (
                   <div
                     key={log.id}
-                    className="w-full flex items-center gap-4 p-4 neumorphic-elevated group bg-white"
+                    className="w-full flex items-center gap-4 p-4 neumorphic-elevated group bg-[var(--surface-white)]"
                   >
                     <div className="shrink-0">
-                      <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md neumorphic-elevated">
+                      <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[var(--surface-white)] shadow-md neumorphic-elevated">
                         <img src={log.avatar} alt={log.name} className="w-full h-full object-cover" />
                       </div>
                     </div>
 
                     <div className="flex-1 text-left min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <h3 className="font-extrabold text-[#1F2937] truncate">{log.name}</h3>
+                        <h3 className="font-extrabold text-[var(--text-primary)] truncate">{log.name}</h3>
                         {log.type === 'video' ? (
                           <svg className="w-3 h-3 text-[#12C784]" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
@@ -364,7 +364,7 @@ const ChatListScreen: React.FC<ChatListScreenProps> = ({
                         <div className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${getStatusBg(log.status)} ${getStatusColor(log.status)}`}>
                           {log.status}
                         </div>
-                        <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-wider">{log.time}</span>
+                        <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{log.time}</span>
                       </div>
                     </div>
 

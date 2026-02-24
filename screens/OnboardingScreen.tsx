@@ -82,11 +82,11 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
     };
 
     return (
-        <div className="absolute inset-0 z-[60] bg-[#F4F7FA] flex items-center justify-center p-6">
+        <div className="absolute inset-0 z-[60] bg-[var(--bg-pastel)] flex items-center justify-center p-6">
             <div className="w-full h-full max-h-[750px] relative flex flex-col items-center">
 
                 {/* Card Container */}
-                <div className="w-full flex-1 relative overflow-hidden rounded-[28px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] bg-white flex flex-col">
+                <div className="w-full flex-1 relative overflow-hidden rounded-[28px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] bg-[var(--surface-white)] flex flex-col">
 
                     {/* Top Section (60%) */}
                     <div className={`relative h-[60%] w-full flex items-center justify-center transition-all duration-700 bg-gradient-to-br ${cards[currentCard].gradient}`}>
@@ -99,17 +99,17 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
                             {cards.map((_, i) => (
                                 <div
                                     key={i}
-                                    className={`h-1.5 transition-all duration-300 rounded-full ${i === currentCard ? 'w-6 bg-white' : 'w-1.5 bg-white/40'}`}
+                                    className={`h-1.5 transition-all duration-300 rounded-full ${i === currentCard ? 'w-6 bg-[var(--surface-white)]' : 'w-1.5 bg-[var(--surface-white)]/40'}`}
                                 />
                             ))}
                         </div>
                     </div>
 
                     {/* Bottom Section (40%) */}
-                    <div className="h-[40%] w-full bg-white p-10 flex flex-col items-center text-center">
-                        <h2 className="text-2xl font-black text-[#1F2937] mb-2 transition-all duration-500">{cards[currentCard].title}</h2>
-                        <p className="text-sm font-extrabold text-[#12C784] uppercase tracking-widest mb-4">{cards[currentCard].tagline}</p>
-                        <p className="text-sm text-[#6B7280] font-medium leading-relaxed max-w-[240px]">
+                    <div className="h-[40%] w-full bg-[var(--surface-white)] p-10 flex flex-col items-center text-center">
+                        <h2 className="text-2xl font-black text-[var(--text-primary)] mb-2 transition-all duration-500">{cards[currentCard].title}</h2>
+                        <p className="text-sm font-extrabold text-[var(--primary-mint-dark)] uppercase tracking-widest mb-4">{cards[currentCard].tagline}</p>
+                        <p className="text-sm text-[var(--text-secondary)] font-medium leading-relaxed max-w-[240px]">
                             {cards[currentCard].description}
                         </p>
                     </div>
@@ -119,7 +119,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
                 <div className="w-full mt-8 flex items-center justify-between px-4">
                     <button
                         onClick={onComplete}
-                        className="text-[#6B7280] font-black text-xs uppercase tracking-widest hover:text-[#1F2937] transition-colors"
+                        className="text-[var(--text-secondary)] font-black text-xs uppercase tracking-widest hover:text-[var(--text-primary)] transition-colors"
                     >
                         Skip
                     </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Screen, UserProfile, ChatPreview, Message, CallLog, SecuritySettings } from './types';
+import { Screen, UserProfile, ChatPreview, Message, CallLog, SecuritySettings, AppearanceSettings, ThemeMode, PrivacySettings } from './types';
 import UserDetailsScreen from './screens/UserDetailsScreen';
 import SplashScreen from './screens/SplashScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -10,6 +10,7 @@ import ChatListScreen from './screens/ChatListScreen';
 import ChatScreen from './screens/ChatScreen';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import { ThemeProvider, useTheme } from './ThemeContext';
 import AIToolsScreen from './screens/AIToolsScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import PrivacyScreen from './screens/PrivacyScreen';
@@ -23,6 +24,11 @@ import LocationPickerScreen from './screens/LocationPickerScreen';
 import DocumentPreviewScreen from './screens/DocumentPreviewScreen';
 import FingerprintLockScreen from './screens/FingerprintLockScreen';
 import FaceIDLockScreen from './screens/FaceIDLockScreen';
+import LastSeenPrivacyScreen from './screens/LastSeenPrivacyScreen';
+import ProfilePhotoPrivacyScreen from './screens/ProfilePhotoPrivacyScreen';
+import AboutPrivacyScreen from './screens/AboutPrivacyScreen';
+import BlockedContactsScreen from './screens/BlockedContactsScreen';
+import ContactSelectorScreen from './screens/ContactSelectorScreen';
 
 // Mock Gemini AI service
 const gemini = {
@@ -48,6 +54,14 @@ const App: React.FC = () => {
     preferredBiometric: 'fingerprint',
     timeout: 'immediate'
   });
+  const [privacySettings, setPrivacySettings] = useState<PrivacySettings>({
+    lastSeen: 'everyone',
+    online: 'everyone',
+    profilePhoto: 'contacts',
+    about: 'everyone',
+    readReceipts: true,
+    blockedContacts: []
+  });
   const [isLocked, setIsLocked] = useState(false);
   const lastActiveRef = useRef<number>(Date.now());
   const [selectedChat, setSelectedChat] = useState<ChatPreview | null>(null);
@@ -55,6 +69,11 @@ const App: React.FC = () => {
   const [selectedDocument, setSelectedDocument] = useState<{ name: string; size: string; type: string } | null>(null);
   const [isAILoading, setIsAILoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: '', visible: false });
+  const [selectorConfig, setSelectorConfig] = useState<{
+    title: string;
+    onSelect: (ids: string[]) => void;
+    initialSelection: string[];
+  } | null>(null);
   const [callLogs, setCallLogs] = useState<CallLog[]>([
     { id: '1', name: 'James Bond', avatar: 'https://picsum.photos/seed/james/200', type: 'audio', status: 'outgoing', time: '10:30 AM' },
     { id: '2', name: 'Sarah Connor', avatar: 'https://picsum.photos/seed/sarah/200', type: 'video', status: 'missed', time: 'Yesterday' },
@@ -134,6 +153,8 @@ const App: React.FC = () => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [securitySettings]);
 
+  const { activeTheme } = useTheme();
+
   const navigate = (screen: Screen) => {
     setCurrentScreen(screen);
   };
@@ -150,6 +171,15 @@ const App: React.FC = () => {
       ...prev,
       [chatId]: (prev[chatId] || []).map(m => m.id === messageId ? { ...m, ...updates } : m)
     }));
+  };
+
+  const handleUpdatePrivacy = (update: Partial<PrivacySettings>) => {
+    setPrivacySettings(prev => ({ ...prev, ...update }));
+  };
+
+  const openContactSelector = (title: string, onSelect: (ids: string[]) => void, initialSelection: string[] = []) => {
+    setSelectorConfig({ title, onSelect, initialSelection });
+    navigate(Screen.ContactSelector);
   };
 
   const handlePhoneSubmit = (phone: string) => {
@@ -364,7 +394,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative h-screen w-full max-w-[430px] mx-auto bg-[#F4F7FA] overflow-hidden shadow-2xl flex flex-col border-x border-white/20">
+    <div className={`relative h-screen w-full max-w-[430px] mx-auto bg-[var(--bg-pastel)] overflow-hidden shadow-2xl flex flex-col border-x border-white/20 transition-all duration-[250ms] ${activeTheme === 'dark' ? 'dark' : ''}`}>
       <div className="flex-1 relative overflow-hidden">
         {currentScreen === Screen.Splash && (
           <SplashScreen onComplete={() => navigate(Screen.Onboarding)} />
@@ -509,8 +539,87 @@ const App: React.FC = () => {
 
         {currentScreen === Screen.Privacy && (
           <PrivacyScreen
+            privacySettings={privacySettings}
+            onUpdatePrivacy={setPrivacySettings}
             onBack={() => navigate(Screen.Settings)}
             onSetupBiometrics={() => navigate(Screen.BiometricsSetup)}
+            onLastSeen={() => navigate(Screen.LastSeenPrivacy)}
+            onProfilePhoto={() => navigate(Screen.ProfilePhotoPrivacy)}
+            onAbout={() => navigate(Screen.AboutPrivacy)}
+            onBlockedContacts={() => navigate(Screen.BlockedContacts)}
+          />
+        )}
+
+        {currentScreen === Screen.BlockedContacts && (
+          <BlockedContactsScreen
+            blockedIds={privacySettings.blockedContacts}
+            contacts={chats}
+            onUnblock={(id) => setPrivacySettings(prev => ({
+              ...prev,
+              blockedContacts: prev.blockedContacts.filter(cid => cid !== id)
+            }))}
+            onAdd={() => openContactSelector("Block Contact", (ids) => {
+              setPrivacySettings(prev => ({
+                ...prev,
+                blockedContacts: Array.from(new Set([...prev.blockedContacts, ...ids]))
+              }));
+              navigate(Screen.BlockedContacts);
+            }, [])}
+            onBack={() => navigate(Screen.Privacy)}
+          />
+        )}
+
+        {currentScreen === Screen.LastSeenPrivacy && (
+          <LastSeenPrivacyScreen
+            settings={privacySettings}
+            onUpdate={handleUpdatePrivacy}
+            onBack={() => navigate(Screen.Privacy)}
+            onSelectExcept={() => openContactSelector("Last Seen Except", (ids) => {
+              // Note: In a real app we'd store these specific exclusions
+              console.log('Excluded from Last Seen:', ids);
+              navigate(Screen.LastSeenPrivacy);
+            }, [])}
+          />
+        )}
+
+        {currentScreen === Screen.ProfilePhotoPrivacy && (
+          <ProfilePhotoPrivacyScreen
+            settings={privacySettings}
+            onUpdate={handleUpdatePrivacy}
+            onBack={() => navigate(Screen.Privacy)}
+            onSelectExcept={() => openContactSelector("Profile Photo Except", (ids) => {
+              console.log('Excluded from Profile Photo:', ids);
+              navigate(Screen.ProfilePhotoPrivacy);
+            }, [])}
+          />
+        )}
+
+        {currentScreen === Screen.AboutPrivacy && (
+          <AboutPrivacyScreen
+            settings={privacySettings}
+            onUpdate={handleUpdatePrivacy}
+            onBack={() => navigate(Screen.Privacy)}
+            onSelectExcept={() => openContactSelector("About Except", (ids) => {
+              console.log('Excluded from About:', ids);
+              navigate(Screen.AboutPrivacy);
+            }, [])}
+          />
+        )}
+
+        {currentScreen === Screen.ContactSelector && selectorConfig && (
+          <ContactSelectorScreen
+            title={selectorConfig.title}
+            contacts={chats}
+            initialSelection={selectorConfig.initialSelection}
+            onBack={() => {
+              setSelectorConfig(null);
+              window.history.back(); // Simple back for now as it's a sub-flow
+              // Fallback navigation if needed
+            }}
+            onSelect={(ids) => {
+              selectorConfig.onSelect(ids);
+              setSelectorConfig(null);
+            }}
           />
         )}
 
@@ -566,4 +675,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const AppWrapper: React.FC = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+export default AppWrapper;

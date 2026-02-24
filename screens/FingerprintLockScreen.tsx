@@ -43,14 +43,14 @@ const FingerprintLockScreen: React.FC<FingerprintLockScreenProps> = ({ onSuccess
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#F4F7FA] animate-fade-in overflow-hidden relative">
+        <div className="flex flex-col h-full bg-[var(--bg-pastel)] animate-fade-in overflow-hidden relative">
             <div className="flex-1 flex flex-col items-center justify-center p-8">
                 {/* Header Text */}
                 <div className="text-center mb-16">
-                    <h1 className="text-2xl font-black text-[#1F2937] mb-3">
+                    <h1 className="text-2xl font-black text-[var(--text-primary)] mb-3">
                         Unlock with Fingerprint
                     </h1>
-                    <p className="text-sm text-[#6B7280] font-medium max-w-xs mx-auto">
+                    <p className="text-sm text-[var(--text-secondary)] font-medium max-w-xs mx-auto">
                         Use your fingerprint to access your chats securely.
                     </p>
                 </div>
@@ -66,7 +66,7 @@ const FingerprintLockScreen: React.FC<FingerprintLockScreenProps> = ({ onSuccess
                         onClick={() => simulateAuth(Math.random() > 0.3)} // Click to simulate for demo
                         className={`w-48 h-48 rounded-full flex items-center justify-center transition-all duration-500 cursor-pointer relative z-10
               ${state === 'failed' ? 'animate-shake' : ''}
-              ${state === 'success' ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] shadow-[#2FED9A]/30 scale-105' : 'bg-[#F4F7FA] shadow-xl border-4 border-white'}
+              ${state === 'success' ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] shadow-[#2FED9A]/30 scale-105' : 'bg-[var(--bg-pastel)] shadow-xl border-4 border-[var(--surface-white)]'}
               ${state === 'waiting' ? 'shadow-[-8px_-8px_20px_rgba(255,255,255,0.7),8px_8px_20px_rgba(0,0,0,0.06)]' : ''}
               ${state === 'too-many' ? 'grayscale opacity-70' : ''}
             `}
@@ -76,7 +76,7 @@ const FingerprintLockScreen: React.FC<FingerprintLockScreenProps> = ({ onSuccess
                                 : undefined
                         }}
                     >
-                        <div className={`transition-all duration-500 ${state === 'success' ? 'text-white' : 'text-[#1F2937]'}`}>
+                        <div className={`transition-all duration-500 ${state === 'success' ? 'text-white' : 'text-[var(--text-primary)]'}`}>
                             {state === 'success' ? (
                                 <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -90,7 +90,7 @@ const FingerprintLockScreen: React.FC<FingerprintLockScreenProps> = ({ onSuccess
 
                         {/* Success Glow */}
                         {state === 'success' && (
-                            <div className="absolute inset-0 bg-white/20 rounded-full animate-shimmer" />
+                            <div className="absolute inset-0 bg-[var(--surface-white)]/20 rounded-full animate-shimmer" />
                         )}
                     </div>
                 </div>

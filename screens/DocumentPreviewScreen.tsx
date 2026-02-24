@@ -40,7 +40,7 @@ const DocumentPreviewScreen: React.FC<DocumentPreviewScreenProps> = ({ document,
                 );
             default:
                 return (
-                    <div className="w-16 h-16 rounded-2xl bg-[#F4F7FA] flex items-center justify-center text-[#94A3B8] neumorphic-elevated shadow-lg">
+                    <div className="w-16 h-16 rounded-2xl bg-[var(--bg-pastel)] flex items-center justify-center text-[var(--text-secondary)] neumorphic-elevated shadow-lg">
                         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A1 1 0 0111 2.293l4.707 4.707a1 1 0 01.293.707V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 2v10h8V8h-3a1 1 0 01-1-1V4H6z" clipRule="evenodd" />
                         </svg>
@@ -58,18 +58,18 @@ const DocumentPreviewScreen: React.FC<DocumentPreviewScreenProps> = ({ document,
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-[360px] bg-[#F4F7FA] rounded-[32px] overflow-hidden shadow-[0_30px_60px_-12px_rgba(0,0,0,0.25)] border border-white/50 animate-scale-in">
+            <div className="relative w-full max-w-[360px] bg-[var(--bg-pastel)] rounded-[32px] overflow-hidden shadow-[0_30px_60px_-12px_rgba(0,0,0,0.25)] border border-[var(--surface-white)]/50 animate-scale-in">
 
                 {/* Top Header Card */}
                 <div className="p-8 pb-6 flex flex-col items-center text-center">
                     {getFileIcon()}
-                    <h2 className="mt-5 text-lg font-extrabold text-[#1F2937] px-4 truncate w-full">{document.name}</h2>
-                    <p className="text-[#6B7280] text-[10px] font-black uppercase tracking-widest mt-1 opacity-60">{document.size} • {document.type} DOCUMENT</p>
+                    <h2 className="mt-5 text-lg font-extrabold text-[var(--text-primary)] px-4 truncate w-full">{document.name}</h2>
+                    <p className="text-[var(--text-secondary)] text-[10px] font-black uppercase tracking-widest mt-1 opacity-60">{document.size} • {document.type} DOCUMENT</p>
                 </div>
 
                 {/* Middle Preview View */}
                 <div className="px-8 pb-8">
-                    <div className="w-full aspect-[4/3] bg-white rounded-3xl neumorphic-inset flex items-center justify-center border border-white overflow-hidden p-4">
+                    <div className="w-full aspect-[4/3] bg-[var(--surface-white)] rounded-3xl neumorphic-inset flex items-center justify-center border border-[var(--surface-white)] overflow-hidden p-4">
                         {isLoading ? (
                             <div className="flex flex-col items-center gap-3">
                                 <div className="w-10 h-10 border-4 border-[#2FED9A]/20 border-t-[#2FED9A] rounded-full animate-spin" />
@@ -89,7 +89,7 @@ const DocumentPreviewScreen: React.FC<DocumentPreviewScreenProps> = ({ document,
                                             <path fillRule="evenodd" d="M16.707 5.293l-4.707 4.707a1 1 0 01-1.414 0L7 6.414 2.707 10.707a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 7.586l4.293-4.293a1 1 0 011.414 1.414z" clipRule="evenodd" />
                                         </svg>
                                     </div>
-                                    <span className="text-[11px] font-bold text-[#94A3B8]">Safe & Ready to send</span>
+                                    <span className="text-[11px] font-bold text-[var(--text-secondary)]">Safe & Ready to send</span>
                                 </div>
                             </div>
                         )}
@@ -104,14 +104,14 @@ const DocumentPreviewScreen: React.FC<DocumentPreviewScreenProps> = ({ document,
                             placeholder="Add a caption..."
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
-                            className="w-full bg-[#F4F7FA] neumorphic-inset rounded-2xl px-6 py-4 text-sm font-medium outline-none border-none text-[#1F2937] placeholder-[#94A3B8]"
+                            className="w-full bg-[var(--bg-pastel)] neumorphic-inset rounded-2xl px-6 py-4 text-sm font-medium outline-none border-none text-[var(--text-primary)] placeholder-[var(--text-secondary)]"
                         />
                     </div>
 
                     <div className="flex items-center gap-4">
                         <button
                             onClick={onBack}
-                            className="flex-1 py-4 text-xs font-black text-[#6B7280] uppercase tracking-widest hover:text-[#1F2937] transition-colors"
+                            className="flex-1 py-4 text-xs font-black text-[var(--text-secondary)] uppercase tracking-widest hover:text-[var(--text-primary)] transition-colors"
                         >
                             Cancel
                         </button>

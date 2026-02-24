@@ -26,24 +26,24 @@ const MediaPreviewScreen: React.FC<MediaPreviewScreenProps> = ({ media, contact,
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#F4F7FA] relative animate-fade-in overflow-hidden">
+        <div className="flex flex-col h-full bg-[var(--bg-pastel)] relative animate-fade-in overflow-hidden">
             {/* Background Overlay */}
             <div
-                className="absolute inset-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-0"
+                className="absolute inset-0 bg-[var(--bg-pastel)]/80 backdrop-blur-xl z-0"
             />
 
             {/* Top Bar */}
             <header className="px-6 py-6 flex items-center justify-between relative z-10 safe-area-top">
-                <button onClick={onBack} className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#1F2937] active:scale-95 transition-transform border border-white/20 shadow-sm">
+                <button onClick={onBack} className="w-10 h-10 rounded-full bg-[var(--surface-white)] flex items-center justify-center text-[var(--text-primary)] active:scale-95 transition-transform border border-[var(--surface-white)]/20 shadow-sm">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 <div className="flex flex-col items-center">
-                    <span className="text-[#1F2937] font-bold text-sm tracking-tight">{media.type === 'image' ? 'Image Preview' : 'Video Preview'}</span>
-                    <span className="text-[#6B7280] text-[10px] font-black uppercase tracking-widest mt-0.5">{contact.name}</span>
+                    <span className="text-[var(--text-primary)] font-bold text-sm tracking-tight">{media.type === 'image' ? 'Image Preview' : 'Video Preview'}</span>
+                    <span className="text-[var(--text-secondary)] text-[10px] font-black uppercase tracking-widest mt-0.5">{contact.name}</span>
                 </div>
-                <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#1F2937] active:scale-95 transition-transform border border-white/20 shadow-sm">
+                <button className="w-10 h-10 rounded-full bg-[var(--surface-white)] flex items-center justify-center text-[var(--text-primary)] active:scale-95 transition-transform border border-[var(--surface-white)]/20 shadow-sm">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
@@ -86,7 +86,7 @@ const MediaPreviewScreen: React.FC<MediaPreviewScreenProps> = ({ media, contact,
                                 </div>
 
                                 {/* Video Scrubber */}
-                                <div className="absolute bottom-4 left-4 right-4 h-1 bg-white/20 rounded-full overflow-hidden">
+                                <div className="absolute bottom-4 left-4 right-4 h-1 bg-[var(--surface-white)]/20 rounded-full overflow-hidden">
                                     <div className="h-full bg-gradient-to-r from-[#2FED9A] to-[#12C784] w-1/3 shadow-[0_0_8px_#2FED9A]" />
                                 </div>
                             </div>
@@ -100,7 +100,7 @@ const MediaPreviewScreen: React.FC<MediaPreviewScreenProps> = ({ media, contact,
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setIsReselecting(true)}
-                        className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#1F2937] border border-white/20 active:scale-90 transition-all shrink-0 neumorphic-elevated shadow-sm"
+                        className="w-12 h-12 rounded-full bg-[var(--surface-white)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--surface-white)]/20 active:scale-90 transition-all shrink-0 neumorphic-elevated shadow-sm"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -112,7 +112,7 @@ const MediaPreviewScreen: React.FC<MediaPreviewScreenProps> = ({ media, contact,
                             placeholder="Add a caption..."
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
-                            className="w-full bg-white border border-white/20 rounded-full px-6 py-3.5 text-[#1F2937] text-sm outline-none placeholder-[#9CA3AF] focus:bg-white/90 transition-all shadow-inner"
+                            className="w-full bg-[var(--surface-white)] border border-[var(--surface-white)]/20 rounded-full px-6 py-3.5 text-[var(--text-primary)] text-sm outline-none placeholder-[#9CA3AF] focus:bg-[var(--surface-white)]/90 transition-all shadow-inner"
                         />
                     </div>
                     <button

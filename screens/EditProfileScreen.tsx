@@ -50,14 +50,14 @@ const EditProfileScreen: React.FC<EditProfileScreenProps> = ({ user, onBack, onS
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F4F7FA] overflow-hidden relative">
-      <header className="p-6 pb-2 flex items-center gap-4 sticky top-0 bg-[#F4F7FA]/80 backdrop-blur-xl z-20">
-        <button onClick={onBack} className="w-10 h-10 icon-container text-[#1F2937] active:scale-95 transition-transform">
+    <div className="flex flex-col h-full bg-[var(--bg-pastel)] overflow-hidden relative">
+      <header className="p-6 pb-2 flex items-center gap-4 sticky top-0 bg-[var(--bg-pastel)]/80 backdrop-blur-xl z-20">
+        <button onClick={onBack} className="w-10 h-10 icon-container text-[var(--text-primary)] active:scale-95 transition-transform">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h1 className="text-xl font-black text-[#1F2937]">Edit Profile</h1>
+        <h1 className="text-xl font-black text-[var(--text-primary)]">Edit Profile</h1>
       </header>
 
       <div className="p-8 flex-1 overflow-y-auto hide-scrollbar">
@@ -68,14 +68,14 @@ const EditProfileScreen: React.FC<EditProfileScreenProps> = ({ user, onBack, onS
                 <img src={photo} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-[#EAEEF3] flex items-center justify-center">
-                  <svg className="w-16 h-16 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-16 h-16 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
               )}
             </div>
             <input type="file" className="hidden" accept="image/*" onChange={handlePhotoChange} />
-            <div className="absolute -bottom-1 -right-1 bg-gradient-to-br from-[#2FED9A] to-[#12C784] rounded-2xl p-3 border-4 border-[#F4F7FA] shadow-xl shadow-[#2FED9A]/20">
+            <div className="absolute -bottom-1 -right-1 bg-gradient-to-br from-[#2FED9A] to-[#12C784] rounded-2xl p-3 border-4 border-[var(--bg-pastel)] shadow-xl shadow-[#2FED9A]/20">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -87,7 +87,7 @@ const EditProfileScreen: React.FC<EditProfileScreenProps> = ({ user, onBack, onS
 
         <div className="space-y-8">
           <div className="space-y-3">
-            <label className="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em] px-4">Full Name</label>
+            <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] px-4">Full Name</label>
             <div className={`input-field-neumorphic w-full ${error ? 'input-field-error' : ''}`}>
               <input
                 type="text"
@@ -97,15 +97,15 @@ const EditProfileScreen: React.FC<EditProfileScreenProps> = ({ user, onBack, onS
                   setName(e.target.value);
                   setError('');
                 }}
-                className="w-full bg-transparent outline-none text-xl font-medium text-[#1F2937] placeholder-[#9CA3AF]"
+                className="w-full bg-transparent outline-none text-xl font-medium text-[var(--text-primary)] placeholder-[var(--text-secondary)]"
               />
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex justify-between items-center px-4">
-              <label className="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em]">About</label>
-              <span className={`text-[9px] font-black tracking-widest ${about.length >= charLimit ? 'text-[#FF6B6B]' : 'text-[#94A3B8]'}`}>
+              <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em]">About</label>
+              <span className={`text-[9px] font-black tracking-widest ${about.length >= charLimit ? 'text-[var(--error-soft)]' : 'text-[var(--text-secondary)]'}`}>
                 {about.length}/{charLimit}
               </span>
             </div>
@@ -115,23 +115,23 @@ const EditProfileScreen: React.FC<EditProfileScreenProps> = ({ user, onBack, onS
                 value={about}
                 maxLength={charLimit}
                 onChange={(e) => setAbout(e.target.value)}
-                className="w-full h-32 bg-[#F8FAFC] neumorphic-inset rounded-[18px] p-5 outline-none text-base font-medium text-[#1F2937] placeholder-[#94A3B8] resize-none transition-all focus:ring-4 focus:ring-[#2FED9A]/10"
+                className="w-full h-32 bg-[var(--bg-pastel)] neumorphic-inset rounded-[18px] p-5 outline-none text-base font-medium text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none transition-all focus:ring-4 focus:ring-[#2FED9A]/10"
               />
             </div>
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-black text-[#6B7280] uppercase tracking-[0.2em] px-4">Phone Number</label>
+            <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] px-4">Phone Number</label>
             <input
               type="text"
               value={user?.phoneNumber || ''}
               disabled
-              className="w-full input-field-neumorphic opacity-70 cursor-not-allowed text-xl font-medium text-[#1F2937]"
+              className="w-full input-field-neumorphic opacity-70 cursor-not-allowed text-xl font-medium text-[var(--text-primary)]"
             />
-            <p className="text-[10px] text-[#6B7280] px-4 font-bold italic opacity-60">Phone number cannot be changed for security.</p>
+            <p className="text-[10px] text-[var(--text-secondary)] px-4 font-bold italic opacity-60">Phone number cannot be changed for security.</p>
           </div>
 
-          {error && <p className="text-[#FF6B6B] text-xs font-black uppercase tracking-widest text-center opacity-80">{error}</p>}
+          {error && <p className="text-[var(--error-soft)] text-xs font-black uppercase tracking-widest text-center opacity-80">{error}</p>}
 
           <button
             onClick={handleSave}

@@ -51,19 +51,19 @@ const AudioCallScreen: React.FC<AudioCallScreenProps> = ({ contact, onEndCall, o
         <div className="flex flex-col items-center gap-2">
             <button
                 onClick={onClick}
-                className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] shadow-[6px_6px_12px_#d1d9e6,-6px_-6px_12px_#ffffff] ${active
+                className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 active:scale-[0.98] shadow-[6px_6px_12px_var(--neumorphic-shadow),-6px_-6px_12px_var(--neumorphic-light)] ${active
                     ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] text-white shadow-inner shadow-[#2FED9A]/30'
-                    : colorClass || 'bg-[#F4F7FA] text-[#6B7280]'
+                    : colorClass || 'bg-[var(--bg-pastel)] text-[var(--text-secondary)]'
                     }`}
             >
                 <span className={active ? 'drop-shadow-sm' : ''}>{icon}</span>
             </button>
-            <span className="text-[10px] font-bold text-[#6B7280] uppercase tracking-wider">{label}</span>
+            <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{label}</span>
         </div>
     );
 
     return (
-        <div className="flex flex-col h-full bg-[#F4F7FA] relative overflow-hidden">
+        <div className="flex flex-col h-full bg-[var(--bg-pastel)] relative overflow-hidden">
             {/* Background Radial Gradient */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
                 <div className="w-full h-full bg-[radial-gradient(circle_at_center,rgba(47,237,154,0.05)_0%,transparent_70%)]" />
@@ -71,20 +71,20 @@ const AudioCallScreen: React.FC<AudioCallScreenProps> = ({ contact, onEndCall, o
 
             {/* Top Section - Contact Info */}
             <div className="flex flex-col items-center pt-20 z-10">
-                <div className="w-32 h-32 rounded-full p-1 bg-white shadow-[10px_10px_20px_#d1d9e6,-10px_-10px_20px_#ffffff] mb-6">
+                <div className="w-32 h-32 rounded-full p-1 bg-white shadow-[10px_10px_20px_var(--neumorphic-shadow),-10px_-10px_20px_var(--neumorphic-light)] mb-6">
                     <img
                         src={contact.avatar}
                         alt={contact.name}
-                        className="w-full h-full rounded-full object-cover border-4 border-white"
+                        className="w-full h-full rounded-full object-cover border-4 border-[var(--surface-white)]"
                     />
                 </div>
-                <h2 className="text-2xl font-extrabold text-[#1F2937] mb-2">{contact.name}</h2>
+                <h2 className="text-2xl font-extrabold text-[var(--text-primary)] mb-2">{contact.name}</h2>
                 <div className="flex flex-col items-center gap-1">
-                    <p className={`text-sm font-bold uppercase tracking-widest ${status === 'Connected' ? 'text-[#12C784]' : 'text-[#6B7280]'}`}>
+                    <p className={`text-sm font-bold uppercase tracking-widest ${status === 'Connected' ? 'text-[#12C784]' : 'text-[var(--text-secondary)]'}`}>
                         {status}
                     </p>
                     {status === 'Connected' && (
-                        <p className="text-xs font-mono font-bold text-[#1F2937]/50">{formatTime(callTime)}</p>
+                        <p className="text-xs font-mono font-bold text-[var(--text-primary)]/50">{formatTime(callTime)}</p>
                     )}
                 </div>
             </div>
@@ -106,7 +106,7 @@ const AudioCallScreen: React.FC<AudioCallScreenProps> = ({ contact, onEndCall, o
 
             {/* Bottom Control Panel */}
             <div className="p-10 pb-16 z-10">
-                <div className="bg-white/40 backdrop-blur-md rounded-[40px] p-8 shadow-[15px_15px_30px_#d1d9e6,-15px_-15px_30px_#ffffff] border border-white/50 flex flex-wrap justify-between gap-6">
+                <div className="bg-[var(--surface-white)]/40 backdrop-blur-md rounded-[40px] p-8 shadow-[15px_15px_30px_var(--neumorphic-shadow),-15px_-15px_30px_var(--neumorphic-light)] border border-[var(--surface-white)]/50 flex flex-wrap justify-between gap-6">
                     <ControlButton
                         label="Mute"
                         active={isMuted}

@@ -3,19 +3,38 @@
 :root {
   --primary-mint: #2FED9A;
   --primary-mint-dark: #12C784;
+  --primary-light: #2FED9A;
+  --primary-dark: #12C784;
   --bg-pastel: #F4F7FA;
   --surface-white: #FFFFFF;
   --text-primary: #1F2937;
   --text-secondary: #6B7280;
   --error-soft: #FF6B6B;
+  --divider: rgba(0, 0, 0, 0.05);
 
   --neumorphic-light: rgba(255, 255, 255, 0.7);
   --neumorphic-shadow: rgba(0, 0, 0, 0.06);
 
   --primary-gradient: linear-gradient(135deg, var(--primary-mint), var(--primary-mint-dark));
+  --primary-gradient-darker: linear-gradient(135deg, var(--primary-mint), var(--primary-mint-dark));
 
   --radius-xl: 18px;
   --radius-2xl: 24px;
+
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.dark {
+  --bg-pastel: #0F172A;
+  --surface-white: #1E293B;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --divider: rgba(255, 255, 255, 0.08);
+
+  --neumorphic-light: rgba(255, 255, 255, 0.03);
+  --neumorphic-shadow: rgba(0, 0, 0, 0.4);
+
+  --primary-gradient-darker: linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)), var(--primary-gradient);
 }
 
 body {
@@ -77,7 +96,7 @@ body {
 }
 
 .chat-bubble-sent {
-  background: var(--primary-gradient);
+  background: var(--primary-gradient-darker);
   color: white;
   border-radius: 18px;
   box-shadow: 0 4px 12px rgba(47, 237, 154, 0.2);
@@ -93,12 +112,12 @@ body {
 }
 
 .input-field-neumorphic {
-  background: #F8FAFC;
+  background: var(--surface-white);
   border: 1px solid transparent;
   border-radius: 20px;
   box-shadow:
-    inset -3px -3px 7px rgba(255, 255, 255, 0.8),
-    inset 3px 3px 7px rgba(0, 0, 0, 0.06);
+    inset -3px -3px 7px var(--neumorphic-light),
+    inset 3px 3px 7px var(--neumorphic-shadow);
   padding: 14px 18px;
   outline: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -107,16 +126,16 @@ body {
 }
 
 .input-field-neumorphic::placeholder {
-  color: #9CA3AF;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
 .input-field-neumorphic:focus {
   box-shadow:
-    inset -1px -1px 3px rgba(255, 255, 255, 0.8),
-    inset 1px 1px 3px rgba(0, 0, 0, 0.06);
+    inset -1px -1px 3px var(--neumorphic-light),
+    inset 1px 1px 3px var(--neumorphic-shadow);
   border-color: rgba(47, 237, 154, 0.3);
-  background: #FFFFFF;
+  background: var(--surface-white);
   filter: drop-shadow(0 0 8px rgba(47, 237, 154, 0.2));
 }
 
@@ -127,7 +146,7 @@ body {
 
 .input-field-neumorphic:disabled {
   opacity: 0.6;
-  background: #F1F5F9;
+  background: var(--bg-pastel);
   cursor: not-allowed;
   box-shadow: none;
 }

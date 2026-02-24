@@ -113,7 +113,7 @@ const ChatMenu: React.FC<ChatMenuProps> = ({
     return (
         <div
             ref={menuRef}
-            className="absolute top-12 right-0 w-64 bg-white rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] py-2 z-50 animate-slide-down-fade origin-top-right border border-gray-100/50"
+            className="absolute top-12 right-0 w-64 bg-[var(--surface-white)] rounded-[20px] shadow-2xl py-2 z-50 animate-slide-down-fade origin-top-right border border-[var(--divider)]"
             style={{ animationDuration: '200ms' }}
         >
             <div className="py-1">
@@ -122,14 +122,14 @@ const ChatMenu: React.FC<ChatMenuProps> = ({
                         key={index}
                         onClick={() => {
                             item.action();
-                            onClose(); // Optional: close menu on action
+                            onClose();
                         }}
-                        className="w-full px-5 py-3.5 flex items-center gap-4 hover:bg-gray-50 transition-colors group"
+                        className="w-full px-5 py-3.5 flex items-center gap-4 hover:bg-[var(--bg-pastel)] transition-colors group"
                     >
-                        <div className={`text-gray-500 group-hover:text-[#12C784] transition-colors ${item.isToggle && isMuted ? 'text-[#12C784]' : ''}`}>
+                        <div className={`text-[var(--text-secondary)] group-hover:text-[#12C784] transition-colors ${item.isToggle && isMuted ? 'text-[#12C784]' : ''}`}>
                             {item.icon}
                         </div>
-                        <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                        <span className="text-sm font-extrabold text-[var(--text-primary)] group-hover:text-[var(--text-primary)]">
                             {item.label}
                         </span>
                         {item.isToggle && isMuted && (
@@ -139,7 +139,7 @@ const ChatMenu: React.FC<ChatMenuProps> = ({
                 ))}
             </div>
 
-            <div className="h-px bg-gray-100 mx-4 my-1" />
+            <div className="h-px bg-[var(--divider)] mx-4 my-1" />
 
             <div className="py-1">
                 {dangerItems.map((item, index) => (
@@ -149,12 +149,12 @@ const ChatMenu: React.FC<ChatMenuProps> = ({
                             item.action();
                             onClose();
                         }}
-                        className="w-full px-5 py-3.5 flex items-center gap-4 hover:bg-red-50/50 transition-colors group"
+                        className="w-full px-5 py-3.5 flex items-center gap-4 hover:bg-red-500/5 transition-colors group"
                     >
                         <div className="text-[#FF6B6B] group-hover:scale-110 transition-transform duration-200">
                             {item.icon}
                         </div>
-                        <span className="text-sm font-medium text-[#FF6B6B]">
+                        <span className="text-sm font-extrabold text-[#FF6B6B]">
                             {item.label}
                         </span>
                     </button>

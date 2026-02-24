@@ -22,7 +22,12 @@ export enum Screen {
   DocumentPreview = 'document-preview',
   UserDetails = 'user-details',
   FingerprintLock = 'fingerprint-lock',
-  FaceLock = 'face-lock'
+  FaceLock = 'face-lock',
+  LastSeenPrivacy = 'last-seen-privacy',
+  ProfilePhotoPrivacy = 'profile-photo-privacy',
+  AboutPrivacy = 'about-privacy',
+  BlockedContacts = 'blocked-contacts',
+  ContactSelector = 'contact-selector'
 }
 
 export interface ChatPreview {
@@ -68,4 +73,21 @@ export interface SecuritySettings {
   isBiometricEnabled: boolean;
   preferredBiometric: 'fingerprint' | 'face';
   timeout: 'immediate' | '1min' | '5min';
+}
+
+export type ThemeMode = 'light' | 'dark' | 'system';
+
+export interface AppearanceSettings {
+  theme: ThemeMode;
+}
+
+export type PrivacyOption = 'everyone' | 'contacts' | 'contacts_except' | 'nobody';
+
+export interface PrivacySettings {
+  lastSeen: PrivacyOption;
+  online: 'everyone' | 'same_as_last_seen';
+  profilePhoto: PrivacyOption;
+  about: PrivacyOption;
+  readReceipts: boolean;
+  blockedContacts: string[]; // List of contact IDs
 }

@@ -60,12 +60,12 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
             />
 
             <div
-                className={`w-full max-w-sm bg-white rounded-[24px] p-8 shadow-2xl relative z-10 transform transition-all duration-300 ease-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+                className={`w-full max-w-sm bg-[var(--surface-white)] rounded-[24px] p-8 shadow-2xl relative z-10 transform transition-all duration-300 ease-out border border-[var(--divider)] ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
             >
                 <div className="mb-6">
-                    <h2 className="text-xl font-bold text-[#1F2937] mb-1">Report User</h2>
-                    <p className="text-sm text-[#6B7280] font-medium leading-relaxed">
-                        Help us keep Hunt safe. Select a reason describing <span className="text-[#1F2937] font-bold">{userName}</span> below.
+                    <h2 className="text-xl font-black text-[var(--text-primary)] mb-1">Report User</h2>
+                    <p className="text-sm text-[var(--text-secondary)] font-bold leading-relaxed">
+                        Help us keep Hunt safe. Select a reason describing <span className="text-[var(--text-primary)] font-black">{userName}</span> below.
                     </p>
                 </div>
 
@@ -76,14 +76,14 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
                             <button
                                 key={reason}
                                 onClick={() => setSelectedReason(reason)}
-                                className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isSelected ? 'bg-teal-50/50' : 'hover:bg-gray-50'}`}
+                                className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isSelected ? 'bg-[var(--primary-mint)]/5 border border-[var(--primary-mint)]/20' : 'hover:bg-[var(--bg-pastel)]'}`}
                             >
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'border-[#12C784]' : 'border-[#CBD5E1]'}`}>
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'border-[#12C784] bg-[#12C784] shadow-md shadow-[#12C784]/30' : 'border-[var(--text-secondary)]/30'}`}>
                                     {isSelected && (
-                                        <div className="w-2.5 h-2.5 bg-gradient-to-br from-[#2FED9A] to-[#12C784] rounded-full shadow-sm" />
+                                        <div className="w-2.5 h-2.5 bg-white rounded-full shadow-sm" />
                                     )}
                                 </div>
-                                <span className={`text-sm font-semibold transition-colors ${isSelected ? 'text-[#1F2937]' : 'text-[#6B7280]'}`}>
+                                <span className={`text-sm font-extrabold transition-colors ${isSelected ? 'text-[var(--primary-mint-dark)]' : 'text-[var(--text-secondary)]'}`}>
                                     {reason}
                                 </span>
                             </button>
@@ -96,9 +96,9 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
                         value={details}
                         onChange={(e) => setDetails(e.target.value.slice(0, 250))}
                         placeholder="Add more information (optional)"
-                        className="w-full bg-[#F8FAFC] input-field-neumorphic h-24 resize-none text-sm p-4"
+                        className="w-full bg-[var(--surface-white)] input-field-neumorphic h-24 resize-none text-sm p-4 font-bold"
                     />
-                    <div className="absolute bottom-3 right-3 text-[10px] font-bold text-[#94A3B8]">
+                    <div className="absolute bottom-3 right-3 text-[10px] font-black text-[var(--text-secondary)] opacity-50">
                         {details.length}/250
                     </div>
                 </div>
@@ -106,18 +106,18 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
                 <div className="flex gap-4">
                     <button
                         onClick={onClose}
-                        className="flex-1 py-3 text-sm font-bold text-[#6B7280] hover:text-[#1F2937] transition-colors"
+                        className="flex-1 py-3 text-xs font-black text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors uppercase tracking-widest"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSubmit}
                         disabled={!selectedReason || isSubmitting}
-                        className={`flex-1 py-3 rounded-xl font-bold text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale ${isSubmitting ? 'bg-gray-400' : 'bg-gradient-to-br from-[#FF6B6B] to-[#FF8787] shadow-red-100'
+                        className={`flex-1 py-3 rounded-xl font-black text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale text-xs uppercase tracking-widest ${isSubmitting ? 'bg-gray-400' : 'bg-gradient-to-br from-[#FF6B6B] to-[#FF8787] shadow-red-500/20'
                             }`}
                     >
                         {isSubmitting ? (
-                            <div className="flex items-center justify-center gap-2 text-sm">
+                            <div className="flex items-center justify-center gap-2 text-xs">
                                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                 Reporting...
                             </div>

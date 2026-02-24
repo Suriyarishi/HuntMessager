@@ -29,18 +29,18 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onSave }) => {
   };
 
   return (
-    <div className="flex flex-col h-full p-8 pt-20 bg-[#F4F7FA]">
-      <h2 className="text-3xl font-extrabold mb-2 text-[#1F2937]">Profile Info</h2>
-      <p className="text-[#6B7280] mb-12 font-medium">Please provide your name and an optional profile photo.</p>
+    <div className="flex flex-col h-full p-8 pt-20 bg-[var(--bg-pastel)]">
+      <h2 className="text-3xl font-extrabold mb-2 text-[var(--text-primary)]">Profile Info</h2>
+      <p className="text-[var(--text-secondary)] mb-12 font-medium">Please provide your name and an optional profile photo.</p>
 
       <div className="flex flex-col items-center mb-10">
         <label className="relative group cursor-pointer">
-          <div className="w-32 h-32 rounded-full neumorphic-elevated overflow-hidden flex items-center justify-center border-4 border-white transition-transform active:scale-95">
+          <div className="w-32 h-32 rounded-full neumorphic-elevated overflow-hidden flex items-center justify-center border-4 border-[var(--surface-white)] transition-transform active:scale-95">
             {photo ? (
               <img src={photo} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full bg-[#EAEEF3] flex items-center justify-center">
-                <svg className="w-12 h-12 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-12 h-12 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                 </svg>
               </div>
@@ -66,11 +66,11 @@ const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({ onSave }) => {
               setName(e.target.value);
               setError('');
             }}
-            className={`w-full input-field-neumorphic text-xl font-medium text-[#1F2937] ${error ? 'input-field-error' : ''}`}
+            className={`w-full input-field-neumorphic text-xl font-medium text-[var(--text-primary)] ${error ? 'input-field-error' : ''}`}
           />
         </div>
 
-        {error && <p className="text-[#FF6B6B] text-xs font-black uppercase tracking-widest text-center opacity-80">{error}</p>}
+        {error && <p className="text-[var(--error-soft)] text-xs font-black uppercase tracking-widest text-center opacity-80">{error}</p>}
 
         <button
           onClick={handleSave}

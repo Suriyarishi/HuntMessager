@@ -45,13 +45,13 @@ const MuteDurationModal: React.FC<MuteDurationModalProps> = ({
             />
 
             <div
-                className={`w-full max-w-[430px] bg-white rounded-t-[28px] p-6 shadow-2xl relative z-10 transform transition-all duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                className={`w-full max-w-[430px] bg-[var(--surface-white)] rounded-t-[28px] p-6 shadow-2xl relative z-10 transform transition-all duration-300 ease-out border-t border-[var(--divider)] ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
             >
                 {/* Handle bar */}
-                <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
+                <div className="w-12 h-1.5 bg-[var(--divider)] rounded-full mx-auto mb-6" />
 
-                <h2 className="text-xl font-bold text-[#1F2937] mb-1">Mute Notifications</h2>
-                <p className="text-sm text-[#6B7280] mb-8 font-medium">Choose how long you'd like to mute this chat.</p>
+                <h2 className="text-xl font-black text-[var(--text-primary)] mb-1">Mute Notifications</h2>
+                <p className="text-sm text-[var(--text-secondary)] mb-8 font-bold">Choose how long you'd like to mute this chat.</p>
 
                 <div className="space-y-3 mb-8">
                     {options.map((option) => {
@@ -61,18 +61,18 @@ const MuteDurationModal: React.FC<MuteDurationModalProps> = ({
                                 key={option.id}
                                 onClick={() => setSelectedOption(option.id)}
                                 className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300 ${isSelected
-                                    ? 'bg-[#F0FFF4] selection-gradient-border scale-[1.01]'
-                                    : 'bg-[#F8FAFC] border-2 border-transparent hover:bg-gray-100'
+                                    ? 'bg-[var(--primary-mint)]/5 border-2 border-[var(--primary-mint)]/20 scale-[1.01]'
+                                    : 'bg-[var(--bg-pastel)] border-2 border-transparent hover:bg-[var(--divider)]'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
                                     <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 
-                                        ${isSelected ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] border-transparent' : 'border-[#CBD5E1]'}`}>
+                                        ${isSelected ? 'bg-gradient-to-br from-[#2FED9A] to-[#12C784] border-transparent shadow-md shadow-[#2FED9A]/30' : 'border-[var(--text-secondary)]/30'}`}>
                                         {isSelected && (
                                             <div className="w-2.5 h-2.5 bg-white rounded-full shadow-sm" />
                                         )}
                                     </div>
-                                    <span className={`text-sm font-bold transition-colors ${isSelected ? 'text-[#1F2937]' : 'text-gray-600'}`}>
+                                    <span className={`text-sm font-black transition-colors ${isSelected ? 'text-[var(--primary-mint-dark)]' : 'text-[var(--text-secondary)]'}`}>
                                         {option.label}
                                     </span>
                                 </div>
